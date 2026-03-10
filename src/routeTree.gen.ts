@@ -14,6 +14,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard/products'
+import { Route as ApiM1HelloRouteImport } from './routes/api/m1/hello'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -40,6 +42,16 @@ const DashboardProductsRoute = DashboardProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => DashboardRoute,
 } as any)
+const ApiM1HelloRoute = ApiM1HelloRouteImport.update({
+  id: '/api/m1/hello',
+  path: '/api/m1/hello',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,12 +59,16 @@ export interface FileRoutesByFullPath {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/m1/hello': typeof ApiM1HelloRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/m1/hello': typeof ApiM1HelloRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,6 +77,8 @@ export interface FileRoutesById {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/m1/hello': typeof ApiM1HelloRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -70,8 +88,16 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/settings'
     | '/dashboard/'
+    | '/api/auth/$'
+    | '/api/m1/hello'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard/products' | '/dashboard/settings' | '/dashboard'
+  to:
+    | '/'
+    | '/dashboard/products'
+    | '/dashboard/settings'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/api/m1/hello'
   id:
     | '__root__'
     | '/'
@@ -79,11 +105,15 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/settings'
     | '/dashboard/'
+    | '/api/auth/$'
+    | '/api/m1/hello'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiM1HelloRoute: typeof ApiM1HelloRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -123,6 +153,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProductsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/api/m1/hello': {
+      id: '/api/m1/hello'
+      path: '/api/m1/hello'
+      fullPath: '/api/m1/hello'
+      preLoaderRoute: typeof ApiM1HelloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -145,6 +189,8 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiM1HelloRoute: ApiM1HelloRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
