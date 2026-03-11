@@ -8,11 +8,9 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/account.ts'
-export type * from './models/authlog.ts'
-export type * from './models/passkey.ts'
-export type * from './models/session.ts'
-export type * from './models/twofactor.ts'
-export type * from './models/user.ts'
-export type * from './models/verification.ts'
+export type * from './models/User.ts'
+export type * from './models/Session.ts'
+export type * from './models/Account.ts'
+export type * from './models/Verification.ts'
+export type * from './models/TwoFactor.ts'
 export type * from './commonInputTypes.ts'

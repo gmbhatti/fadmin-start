@@ -7,102 +7,80 @@ datasource db {
   provider = "postgresql"
 }
 
-model account {
+
+model User {
+  id               String      @id
+  name             String
+  email            String
+  emailVerified    Boolean     @default(false)
+  image            String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  twoFactorEnabled Boolean?    @default(false)
+  sessions         Session[]
+  accounts         Account[]
+  twofactors       TwoFactor[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
   id                    String    @id
-  userId                String
+  accountId             String
   providerId            String
-  providerAccountId     String
-  password              String?
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
-  accessTokenExpiresAt  DateTime? @db.Timestamptz(6)
-  refreshTokenExpiresAt DateTime? @db.Timestamptz(6)
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
   scope                 String?
-  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
-  user                  user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_account_user")
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  @@index([userId], map: "idx_account_user")
+  @@index([userId])
+  @@map("account")
 }
 
-model authlog {
-  id        String   @id
-  userId    String?
-  action    String
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  user      user?    @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "fk_authlog_user")
-
-  @@index([action], map: "idx_authlog_action")
-  @@index([userId], map: "idx_authlog_user")
-}
-
-model passkey {
-  id           String   @id
-  userId       String
-  name         String?
-  publicKey    String
-  credentialId String   @unique
-  counter      Int      @default(0)
-  deviceType   String?
-  backedUp     Boolean?
-  transports   String?
-  createdAt    DateTime @default(now()) @db.Timestamptz(6)
-  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_passkey_user")
-
-  @@index([userId], map: "idx_passkey_user")
-}
-
-model session {
-  id        String   @id
-  userId    String
-  token     String   @unique
-  expiresAt DateTime @db.Timestamptz(6)
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
-  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_session_user")
-
-  @@index([token], map: "idx_session_token")
-  @@index([userId], map: "idx_session_user")
-}
-
-model twofactor {
-  id          String   @id
-  userId      String   @unique
-  secret      String
-  backupCodes String?
-  createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  user        user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_twofactor_user")
-}
-
-model user {
-  id            String     @id
-  name          String?
-  email         String?    @unique
-  emailVerified Boolean?   @default(false)
-  image         String?
-  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime   @default(now()) @db.Timestamptz(6)
-  account       account[]
-  authlog       authlog[]
-  passkey       passkey[]
-  session       session[]
-  twofactor     twofactor?
-
-  @@index([email], map: "idx_user_email")
-}
-
-model verification {
+model Verification {
   id         String   @id
   identifier String
   value      String
-  expiresAt  DateTime @db.Timestamptz(6)
-  createdAt  DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  @@index([identifier], map: "idx_verification_identifier")
+  @@index([identifier])
+  @@map("verification")
+}
+
+model TwoFactor {
+  id          String @id
+  secret      String
+  backupCodes String
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([secret])
+  @@index([userId])
+  @@map("twoFactor")
 }

@@ -13,9 +13,13 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardRegisterRouteImport } from './routes/dashboard/register'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard/products'
+import { Route as DashboardLoginRouteImport } from './routes/dashboard/login'
 import { Route as ApiM1HelloRouteImport } from './routes/api/m1/hello'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiM1UsersIndexRouteImport } from './routes/api/m1/users/index'
+import { Route as ApiM1UsersIdRouteImport } from './routes/api/m1/users/$id'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -37,9 +41,19 @@ const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardRegisterRoute = DashboardRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardProductsRoute = DashboardProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLoginRoute = DashboardLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => DashboardRoute,
 } as any)
 const ApiM1HelloRoute = ApiM1HelloRouteImport.update({
@@ -52,61 +66,95 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiM1UsersIndexRoute = ApiM1UsersIndexRouteImport.update({
+  id: '/api/m1/users/',
+  path: '/api/m1/users/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiM1UsersIdRoute = ApiM1UsersIdRouteImport.update({
+  id: '/api/m1/users/$id',
+  path: '/api/m1/users/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/register': typeof DashboardRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/m1/hello': typeof ApiM1HelloRoute
+  '/api/m1/users/$id': typeof ApiM1UsersIdRoute
+  '/api/m1/users/': typeof ApiM1UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/register': typeof DashboardRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/m1/hello': typeof ApiM1HelloRoute
+  '/api/m1/users/$id': typeof ApiM1UsersIdRoute
+  '/api/m1/users': typeof ApiM1UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/register': typeof DashboardRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/m1/hello': typeof ApiM1HelloRoute
+  '/api/m1/users/$id': typeof ApiM1UsersIdRoute
+  '/api/m1/users/': typeof ApiM1UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/dashboard/login'
     | '/dashboard/products'
+    | '/dashboard/register'
     | '/dashboard/settings'
     | '/dashboard/'
     | '/api/auth/$'
     | '/api/m1/hello'
+    | '/api/m1/users/$id'
+    | '/api/m1/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard/login'
     | '/dashboard/products'
+    | '/dashboard/register'
     | '/dashboard/settings'
     | '/dashboard'
     | '/api/auth/$'
     | '/api/m1/hello'
+    | '/api/m1/users/$id'
+    | '/api/m1/users'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/login'
     | '/dashboard/products'
+    | '/dashboard/register'
     | '/dashboard/settings'
     | '/dashboard/'
     | '/api/auth/$'
     | '/api/m1/hello'
+    | '/api/m1/users/$id'
+    | '/api/m1/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -114,6 +162,8 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiM1HelloRoute: typeof ApiM1HelloRoute
+  ApiM1UsersIdRoute: typeof ApiM1UsersIdRoute
+  ApiM1UsersIndexRoute: typeof ApiM1UsersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,11 +196,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/register': {
+      id: '/dashboard/register'
+      path: '/register'
+      fullPath: '/dashboard/register'
+      preLoaderRoute: typeof DashboardRegisterRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/products': {
       id: '/dashboard/products'
       path: '/products'
       fullPath: '/dashboard/products'
       preLoaderRoute: typeof DashboardProductsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/login': {
+      id: '/dashboard/login'
+      path: '/login'
+      fullPath: '/dashboard/login'
+      preLoaderRoute: typeof DashboardLoginRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/api/m1/hello': {
@@ -167,17 +231,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/m1/users/': {
+      id: '/api/m1/users/'
+      path: '/api/m1/users'
+      fullPath: '/api/m1/users/'
+      preLoaderRoute: typeof ApiM1UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/m1/users/$id': {
+      id: '/api/m1/users/$id'
+      path: '/api/m1/users/$id'
+      fullPath: '/api/m1/users/$id'
+      preLoaderRoute: typeof ApiM1UsersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardLoginRoute: typeof DashboardLoginRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
+  DashboardRegisterRoute: typeof DashboardRegisterRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLoginRoute: DashboardLoginRoute,
   DashboardProductsRoute: DashboardProductsRoute,
+  DashboardRegisterRoute: DashboardRegisterRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
@@ -191,6 +273,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiM1HelloRoute: ApiM1HelloRoute,
+  ApiM1UsersIdRoute: ApiM1UsersIdRoute,
+  ApiM1UsersIndexRoute: ApiM1UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
