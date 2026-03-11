@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { betterAuth } from "better-auth";
+import { expo } from "@better-auth/expo";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { prisma } from "./db";
@@ -15,6 +16,10 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    plugins: [
+        expo(),
+        tanstackStartCookies(), // make sure this is the last plugin in the array
+    ],
     emailAndPassword: { 
         enabled: true, 
     }, 
@@ -24,10 +29,6 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
         }, 
     },
-    plugins: [
-        expo(),
-        tanstackStartCookies(), // make sure this is the last plugin in the array
-    ],
     trustedOrigins: [
         // Basic scheme
         "betterexpo://",

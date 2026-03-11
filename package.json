@@ -12,6 +12,7 @@
     "check": "prettier --write . && eslint --fix"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.5.4",
     "@faker-js/faker": "^10.0.0",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
