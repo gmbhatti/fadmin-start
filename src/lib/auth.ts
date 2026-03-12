@@ -37,7 +37,7 @@ export const auth = betterAuth({
         // "betterexpo-prod://",
         // "betterexpo-staging://",
         // Wildcard support for all paths following the scheme
-        // "betterexpo://*",
+        "betterexpo://*",
         // Development mode - Expo's exp:// scheme with local IP ranges
         ...(process.env.NODE_ENV === "development"
         ? [
@@ -46,7 +46,7 @@ export const auth = betterAuth({
             "exp://**", // Trust all Expo URLs (wildcard matching)
             "exp://192.168.*.*:*/**", // Trust 192.168.x.x IP range with any port and path
             ]
-        : ["betterexpo://", "betterexpo://*"]),
+        : []),
     ],
 });
 
